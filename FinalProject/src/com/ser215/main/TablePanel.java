@@ -25,10 +25,11 @@ class TablePanel extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
 		try {
-			spadeA = ImageIO.read(new File("/Users/rbeerma/workspace-school/FinalProject/images/spadeA.jpg"));
-			heartK = ImageIO.read(new File("/Users/rbeerma/workspace-school/FinalProject/images/heartK.jpg"));
-			back = ImageIO.read(new File("/Users/rbeerma/workspace-school/FinalProject/images/back.jpg"));
+			spadeA = ImageIO.read(new File("images/spadeA.jpg"));
+			heartK = ImageIO.read(new File("images/heartK.jpg"));
+			back = ImageIO.read(new File("images/back.jpg"));
 		} catch (IOException e) {
 			
 		}
