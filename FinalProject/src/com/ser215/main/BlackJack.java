@@ -282,7 +282,7 @@ public class BlackJack {
 				
 				if(player.playerHand.getTotalValue() == 21){
 					// If player has blackjack, make all other play buttons except 
-					// Stand unavailable
+					// Stand unavailable.
 					btnDeal.setEnabled(false);
 					btnHit.setEnabled(false);
 					btnSplit.setEnabled(false);
