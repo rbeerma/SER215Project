@@ -16,25 +16,15 @@ class TablePanel extends JPanel {
 	
 	public TablePanel() {
 		setBackground(new Color(0, 153, 51));
-		/*try {
-			club2 = ImageIO.read(new File("2club.jpg"));
-		} catch (IOException e) {
-			
-		}*/
+		
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		try {
-			spadeA = ImageIO.read(new File("images/spadeA.jpg"));
-			heartK = ImageIO.read(new File("images/heartK.jpg"));
-			back = ImageIO.read(new File("images/back.jpg"));
-		} catch (IOException e) {
-			
-		}
-		g.drawImage(spadeA, 50, 50, null);
-		g.drawImage(heartK, 85, 50, null);
-		g.drawImage(back, 85, 50, null);
+		Card card1 = new Card(0, 0);
+		System.out.println(card1.toString());
+		g.drawImage(card1.getImg(), 50, 50, null);
+		
 	}
 }
