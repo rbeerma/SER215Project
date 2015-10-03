@@ -141,9 +141,90 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnHit.setEnabled(true);
-				btnStand.setEnabled(true);
-				btnDouble.setEnabled(true);
+				// Make bet buttons unavailable
+				btnBet25.setEnabled(false);
+				btnBet50.setEnabled(false);
+				btnBet100.setEnabled(false);
+				btnClearBet.setEnabled(false);
+				
+				dealer.clearTable();
+				dealer.fillHand();
+				
+				player.playerHand.addCard();
+				player.playerHand.addCard();
+
+				if (player.playerHand.getTotalValue() == 21){
+					//If Player Has blackjack...
+					
+					if (dealer.showingCard.getPipValue() == "ace"){
+						// TODO: Offer Insurance -- need a way for this to be resolved and then
+						// return back...
+					}
+					if (dealer.showingCard.getValue() == 10 && dealer.dealerHand.getTotalValue() == 21){
+						//If dealer is showing 10 and has blackjack, player is paid, payout even
+						
+						// TODO: Show Hole Card
+						playerBank.payoutEven();
+					}
+					else{
+						// TODO: Show Hole Card
+						
+						// Player has blackjack, dealer doesn't, payout for blackjack
+						
+						playerBank.payoutBlackjack();
+						
+						//Enable betting buttons, all other buttons disabled
+						btnBet25.setEnabled(true);
+						btnBet50.setEnabled(true);
+						btnBet100.setEnabled(true);
+						btnClearBet.setEnabled(true);
+
+						btnDeal.setEnabled(false);
+						btnHit.setEnabled(false);
+						btnStand.setEnabled(false);
+						btnSplit.setEnabled(false);
+						btnDouble.setEnabled(false);
+						btnBuyInsurance.setEnabled(false);
+					}
+				}
+				
+				else{
+					//If Player doesn't have blackjack...
+					if (dealer.showingCard.getPipValue() == "ace"){
+						// TODO: Offer Insurance -- need a way for this to be resolved and then
+						// return back...
+					}
+					if (dealer.showingCard.getValue() == 10 && dealer.dealerHand.getTotalValue() == 21){
+						//If dealer is showing 10 and has blackjack, end turn.
+						
+						// TODO: Show Hole Card
+						
+						//Enable betting buttons, all other buttons disabled
+						btnBet25.setEnabled(true);
+						btnBet50.setEnabled(true);
+						btnBet100.setEnabled(true);
+						btnClearBet.setEnabled(true);
+
+						btnDeal.setEnabled(false);
+						btnHit.setEnabled(false);
+						btnStand.setEnabled(false);
+						btnSplit.setEnabled(false);
+						btnDouble.setEnabled(false);
+						btnBuyInsurance.setEnabled(false);
+					}
+					else{
+						if(player.playerHand[0].equals(player.playerHand[1])){
+							// Allow split if first two cards have equal value
+							btnSplit.setEnabled(true);
+						}
+						
+						// Allow hit, stand, double
+						
+						btnHit.setEnabled(true);
+						btnStand.setEnabled(true);
+						btnDouble.setEnabled(true);
+					}
+				}
 				
 			}
 		});
@@ -196,7 +277,29 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Add card to player's hand
+				player.playerHand.addCard();
 				
+				if(player.playerHand.getTotalValue() == 21){
+					// If player has blackjack, make all other play buttons except 
+					// Stand unavailable
+					btnDeal.setEnabled(false);
+					btnHit.setEnabled(false);
+					btnSplit.setEnabled(false);
+					btnDouble.setEnabled(false);
+					btnBuyInsurance.setEnabled(false);
+				}
+				if(player.playerHand.getTotalValue() > 21){
+					// if player has busted, go to bet phase.
+					betPhase();
+				}
+				else{
+					// else allow hit or stand, NOT Split or Double
+					btnHit.setEnabled(true);
+					btnStand.setEnabled(true);
+					btnSplit.setEnabled(false);
+					btnDouble.setEnabled(false);
+				}
 			}
 			
 		});
