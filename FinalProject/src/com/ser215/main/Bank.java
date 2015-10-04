@@ -1,13 +1,12 @@
 package com.ser215.main;
 public class Bank {
 	private double balance;
-	private double betTotal;
-	private final double MAX_BET = 1000;
+	private final double MAX_BET = 500;
 	private double currentBet;
+	private double splitBet;
 	
 	public Bank() {
 		this.balance = 0;
-		this.betTotal = 0;
 		this.currentBet = 0;
 	}
 	
@@ -17,9 +16,24 @@ public class Bank {
 	 */
 	public void placeBet(double bet) {
 		this.currentBet = bet;
-		this.betTotal = betTotal += bet;
 	}
 	
+	public double getSplitBet() {
+		return splitBet;
+	}
+
+	public void setSplitBet(double splitBet) {
+		this.splitBet = splitBet;
+	}
+
+	public double getCurrentBet() {
+		return currentBet;
+	}
+
+	public void setCurrentBet(double currentBet) {
+		this.currentBet = currentBet;
+	}
+
 	/**
 	 * returns the balance of bank
 	 * @return balance of bank
@@ -28,11 +42,16 @@ public class Bank {
 		return this.balance;
 	}
 	
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
 	/**
 	 * Pays out the normal 2:1 return on bet.
 	 */
 	public void payoutNormal() {
 		balance += 2 * currentBet;
+		currentBet = 0;
 	}
 	
 	/**
@@ -40,6 +59,7 @@ public class Bank {
 	 */
 	public void payoutBlackjack() {
 		balance += (3/2) * currentBet;
+		currentBet = 0;
 	}
 	
 	/**
@@ -47,7 +67,8 @@ public class Bank {
 	 * @param bet amount to be added to bet
 	 */
 	public void increaseBet(double bet) {
-		this.betTotal += bet;
+		currentBet += bet;
+		balance -= bet;
 	}
 	
 	/**
@@ -55,10 +76,10 @@ public class Bank {
 	 */
 	public void clearBet() {
 		this.currentBet = 0;
-		this.betTotal = 0;
 	}
 	
 	public void payoutSurrender() {
-		//TO DO, UNSURE
+		balance += 0.5 * currentBet;
+		currentBet = 0;
 	}
 }

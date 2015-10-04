@@ -48,6 +48,8 @@ public class BlackJack {
 		Hand playerHand1 = new Hand();
 		Hand playerHand2 = new Hand();
 		Hand dealerHand = new Hand();
+		Bank bank = new Bank();
+		bank.setBalance(1000);
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1000, 551);
@@ -263,6 +265,8 @@ public class BlackJack {
 			public void actionPerformed(ActionEvent e) {
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
+				bank.increaseBet(25);
+				//if (bank.getCurrentBet())
 				
 			}
 			
