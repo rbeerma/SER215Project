@@ -303,8 +303,6 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dealer.getDealerHand().setShowHoleCard(true);
-				
 				// Add card to player's hand
 				playerHand1.addCard(deck.getNextCard());
 				
