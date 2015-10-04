@@ -1,4 +1,4 @@
-package src.com.ser215.main;
+package com.ser215.main;
 public class Bank {
 	private double balance;
 	private double betTotal;

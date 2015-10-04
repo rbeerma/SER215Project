@@ -42,6 +42,13 @@ public class BlackJack {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		Player player = new Player("Player");
+		Dealer dealer = new Dealer();
+		Deck deck = new Deck();
+		Hand playerHand1 = new Hand();
+		Hand playerHand2 = new Hand();
+		Hand dealerHand = new Hand();
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1000, 551);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -146,32 +153,42 @@ public class BlackJack {
 				btnBet50.setEnabled(false);
 				btnBet100.setEnabled(false);
 				btnClearBet.setEnabled(false);
+				btnDeal.setEnabled(false);
 				
-				dealer.clearTable();
-				dealer.fillHand();
+				//dealer.clearTable();
+				//dealer.fillHand();
 				
-				player.playerHand.addCard();
-				player.playerHand.addCard();
+				playerHand1.addCard(deck.getNextCard());
+				dealerHand.addCard(deck.getNextCard());
+				dealer.setShowingCard(dealerHand.getCards().get(0));
+				playerHand1.addCard(deck.getNextCard());
+				dealerHand.addCard(deck.getNextCard());
+				
+				player.setPlayerHand1(playerHand1);
+				dealer.setHand(dealerHand);
 
-				if (player.playerHand.getTotalValue() == 21){
+				System.out.println("Player hand: " + playerHand1.toString());
+				System.out.println("Dealer hand: " + dealerHand.toString());
+				
+				if (playerHand1.getTotalValue() == 21){
 					//If Player Has blackjack...
 					
-					if (dealer.showingCard.getPipValue() == "ace"){
+					if (dealer.getShowingCard().getPipValue() == 0){
 						// TODO: Offer Insurance -- need a way for this to be resolved and then
 						// return back...
 					}
-					if (dealer.showingCard.getValue() == 10 && dealer.dealerHand.getTotalValue() == 21){
+					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, player is paid, payout even
 						
 						// TODO: Show Hole Card
-						playerBank.payoutEven();
+						//playerBank.payoutEven();
 					}
 					else{
 						// TODO: Show Hole Card
 						
 						// Player has blackjack, dealer doesn't, payout for blackjack
 						
-						playerBank.payoutBlackjack();
+						//playerBank.payoutBlackjack();
 						
 						//Enable betting buttons, all other buttons disabled
 						btnBet25.setEnabled(true);
@@ -190,11 +207,11 @@ public class BlackJack {
 				
 				else{
 					//If Player doesn't have blackjack...
-					if (dealer.showingCard.getPipValue() == "ace"){
+					if (dealer.getShowingCard().getPipValue() == 0){
 						// TODO: Offer Insurance -- need a way for this to be resolved and then
 						// return back...
 					}
-					if (dealer.showingCard.getValue() == 10 && dealer.dealerHand.getTotalValue() == 21){
+					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, end turn.
 						
 						// TODO: Show Hole Card
@@ -213,7 +230,7 @@ public class BlackJack {
 						btnBuyInsurance.setEnabled(false);
 					}
 					else{
-						if(player.playerHand[0].equals(player.playerHand[1])){
+						if(playerHand1.getCards().get(0).getValue() == playerHand1.getCards().get(1).getValue()){
 							// Allow split if first two cards have equal value
 							btnSplit.setEnabled(true);
 						}
@@ -278,9 +295,11 @@ public class BlackJack {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Add card to player's hand
-				player.playerHand.addCard();
+				playerHand1.addCard(deck.getNextCard());
 				
-				if(player.playerHand.getTotalValue() == 21){
+				System.out.print("Player hand after hit:" + playerHand1.toString());
+				
+				if(playerHand1.getTotalValue() == 21){
 					// If player has blackjack, make all other play buttons except 
 					// Stand unavailable.
 					btnDeal.setEnabled(false);
@@ -289,9 +308,9 @@ public class BlackJack {
 					btnDouble.setEnabled(false);
 					btnBuyInsurance.setEnabled(false);
 				}
-				if(player.playerHand.getTotalValue() > 21){
+				if(playerHand1.getTotalValue() > 21){
 					// if player has busted, go to bet phase.
-					betPhase();
+					//betPhase();
 				}
 				else{
 					// else allow hit or stand, NOT Split or Double

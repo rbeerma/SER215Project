@@ -22,9 +22,5 @@ class TablePanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		Card card1 = new Card(0, 0);
-		System.out.println(card1.toString());
-		g.drawImage(card1.getImg(), 50, 50, null);
-		
 	}
 }

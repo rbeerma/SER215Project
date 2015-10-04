@@ -11,12 +11,12 @@ public class Deck {
 	public Deck() {
 		totalCards = 52;
 		cards = new ArrayList<Card>();
-		int x = 0;
+		//int x = 0;
 		
 		for (int i=0; i<=3; i++) {
 			for (int j=0; j<=12; j++) {
 				cards.add(new Card(i, j));
-				x++;
+				//x++;
 			}
 		}
 	}
