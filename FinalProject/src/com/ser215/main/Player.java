@@ -48,11 +48,11 @@ public class Player {
 	 * returns the hand of the player
 	 * @return hand of the player
 	 */
-	public Hand getPlayerHand1() {
+	public static Hand getPlayerHand1() {
 		return playerHand1;
 	}
 	
-	public Hand getPlayerHand2() {
+	public static Hand getPlayerHand2() {
 		return playerHand2;
 	}
 	

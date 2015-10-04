@@ -7,8 +7,10 @@ public class Deck {
 	private ArrayList<Card> cards;
 	private Card nextCard; //not sure if this is needed
 	private static int totalCards;
+	public static boolean cardsDealt;
 		
 	public Deck() {
+		cardsDealt = false;
 		totalCards = 52;
 		cards = new ArrayList<Card>();
 		//int x = 0;

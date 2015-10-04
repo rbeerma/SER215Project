@@ -13,8 +13,9 @@ import javax.swing.border.SoftBevelBorder;
 public class BlackJack {
 
 	private JFrame frame;
+	Dealer dealer;
+	Player player;
 	
-
 	/**
 	 * Launch the application.
 	 */
@@ -42,8 +43,8 @@ public class BlackJack {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		Player player = new Player("Player");
-		Dealer dealer = new Dealer();
+		player = new Player("Player");
+		dealer = new Dealer();
 		Deck deck = new Deck();
 		Hand playerHand1 = new Hand();
 		Hand playerHand2 = new Hand();
@@ -172,6 +173,8 @@ public class BlackJack {
 				System.out.println("Player hand: " + playerHand1.toString());
 				System.out.println("Dealer hand: " + dealerHand.toString());
 				
+				Deck.cardsDealt = true;
+				
 				if (playerHand1.getTotalValue() == 21){
 					//If Player Has blackjack...
 					
@@ -246,6 +249,8 @@ public class BlackJack {
 				}
 				
 			}
+			
+			
 		});
 		
 		btnClearBet.addActionListener(new ActionListener() {
@@ -298,6 +303,8 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dealer.getDealerHand().setShowHoleCard(true);
+				
 				// Add card to player's hand
 				playerHand1.addCard(deck.getNextCard());
 				
