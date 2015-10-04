@@ -2,18 +2,18 @@ package com.ser215.main;
 
 public class Player {
 	private String name;
-	private Hand playerHand1;
-	private Hand playerHand2;
+	private static Hand playerHand1;
+	private static Hand playerHand2;
 	
 	public Player(String name) {
 		this.name = name;
-		this.playerHand1 = null;
-		this.playerHand2 = null;
+		playerHand1 = null;
+		playerHand2 = null;
 	}
 	
 	public Player(String name, Hand hand) {
 		this.name = name;
-		this.playerHand1 = hand;
+		playerHand1 = hand;
 	}
 	
 	/**
@@ -37,11 +37,11 @@ public class Player {
 	 * @param hand hand to be set to player
 	 */
 	public void setPlayerHand1(Hand hand1) {
-		this.playerHand1 = hand1;
+		playerHand1 = hand1;
 	}
 	
 	public void setPlayerHand2(Hand hand2) {
-		this.playerHand2 = hand2;
+		playerHand2 = hand2;
 	}
 	
 	/**
@@ -49,11 +49,11 @@ public class Player {
 	 * @return hand of the player
 	 */
 	public Hand getPlayerHand1() {
-		return this.playerHand1;
+		return playerHand1;
 	}
 	
 	public Hand getPlayerHand2() {
-		return this.playerHand2;
+		return playerHand2;
 	}
 	
 }

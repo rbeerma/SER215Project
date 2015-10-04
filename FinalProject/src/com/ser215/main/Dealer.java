@@ -1,7 +1,7 @@
 package com.ser215.main;
 
 public class Dealer {
-	private Hand dealerHand;
+	private static Hand dealerHand;
 	private Card showingCard;
 	
 	/**
@@ -9,15 +9,15 @@ public class Dealer {
 	 * @param hand hand to be set to dealer
 	 */
 	public void setHand(Hand hand) {
-		this.dealerHand = hand;
+		dealerHand = hand;
 	}
 	
 	/**
 	 * returns the hand of the dealer
 	 * @return hand of the dealer
 	 */
-	public Hand getHand() {
-		return this.dealerHand;
+	public static Hand getHand() {
+		return dealerHand;
 	}
 	
 	public Card getShowingCard() {
