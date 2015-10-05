@@ -32,6 +32,7 @@ public class Dealer {
 	}
 	
 	public void clearHand(){
-		this.dealerHand.clearHand();
+		dealerHand.clear();
 	}
+
 }

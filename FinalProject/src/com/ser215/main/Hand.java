@@ -25,6 +25,21 @@ public class Hand {
 	public void setTotalValue(int totalValue) {
 		this.totalValue = totalValue;
 	}
+	
+	/*
+	 * This method updates the total value of the hand if one or more of the cards
+	 * is an Ace
+	 */
+	public void updateValue() {
+		for (Card card : cards) {
+			if (card.isAce() && card.getValue() == 11) {
+				if (totalValue > 21) {
+					card.setValue(1);
+					totalValue = totalValue - 10;
+				}
+			}
+		}
+	}
 
 	public ArrayList<Card> getCards() {
 		return cards;
@@ -37,7 +52,7 @@ public class Hand {
 	public void setShowHoleCard(boolean showHoleCard) {
 		this.showHoleCard = showHoleCard;
 	}
-
+	
 	public String toString() {
 		String temp = "\n";
 		
@@ -48,7 +63,8 @@ public class Hand {
 		return temp;
 	}
 	
-	public void clearHand(){
+	public void clear(){
 		this.cards.clear();
+		this.totalValue = 0;
 	}
 }

@@ -1,4 +1,4 @@
-package src.com.ser215.main;
+package com.ser215.main;
 public class Bank {
 	private double balance;
 	private final double MAX_BET = 500;
@@ -62,14 +62,6 @@ public class Bank {
 		currentBet = 0;
 	}
 	
-	public void payoutEven() {
-		/**
-		 * Pays out the 1:1 return on bet.
-		 */
-		balance += currentBet;
-		currentBet = 0;
-	}
-	
 	/**
 	 * Increases the current bet by the new bet amount.
 	 * @param bet amount to be added to bet
@@ -89,5 +81,11 @@ public class Bank {
 	public void payoutSurrender() {
 		balance += 0.5 * currentBet;
 		currentBet = 0;
+	}
+
+	public void payoutEven() {
+		balance += currentBet;
+		currentBet = 0;
+		
 	}
 }
