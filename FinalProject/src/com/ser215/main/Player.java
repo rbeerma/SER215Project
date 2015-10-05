@@ -58,7 +58,7 @@ public class Player {
 	
 	public void clearHand(){
 		playerHand1.clear();
-		playerHand2.clear();
+		//playerHand2.clear();
 	}
 	
 }

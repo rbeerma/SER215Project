@@ -15,10 +15,19 @@ import java.awt.Component;
 public class BlackJack {
 
 	private JFrame frame;
-	Dealer dealer;
-	Player player;
-	DecimalFormat df = new DecimalFormat("#.00");
+	private Dealer dealer;
+	private Player player;
+	private DecimalFormat df = new DecimalFormat("#.00");
+	private GameState gameState;
 	
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public void setGameState(GameState gameState) {
+		this.gameState = gameState;
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -46,6 +55,7 @@ public class BlackJack {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		gameState = GameState.INIT;
 		player = new Player("Player");
 		dealer = new Dealer();
 		Deck deck = new Deck();
@@ -177,6 +187,7 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gameState = GameState.PLAYER_ACT;
 				// Make bet buttons unavailable
 				btnBet25.setEnabled(false);
 				btnBet50.setEnabled(false);
@@ -302,6 +313,7 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gameState = GameState.BETTING;
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
 				bank.increaseBet(25);
@@ -316,6 +328,7 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gameState = GameState.BETTING;
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
 				bank.increaseBet(50);
@@ -330,6 +343,7 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gameState = GameState.BETTING;
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
 				bank.increaseBet(100);
@@ -344,12 +358,13 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gameState = GameState.PLAYER_ACT;
 				// Add card to player's hand
 				playerHand1.addCard(deck.getNextCard());
 				playerHand1.updateValue();
 				lblPlayerValue.setText(String.valueOf(playerHand1.getTotalValue()));
 				
-				if(playerHand1.getTotalValue() == 21){
+				if (playerHand1.getTotalValue() == 21) {
 					// If player has blackjack, make all other play buttons except 
 					// Stand unavailable.
 					btnDeal.setEnabled(false);
@@ -357,8 +372,7 @@ public class BlackJack {
 					//btnSplit.setEnabled(false);
 					//btnDouble.setEnabled(false);
 					//btnBuyInsurance.setEnabled(false);
-				}
-				if(playerHand1.getTotalValue() > 21){
+				} else if (playerHand1.getTotalValue() > 21){
 					// if player has busted, allow betting
 					btnBet25.setEnabled(true);
 					btnBet50.setEnabled(true);
@@ -375,8 +389,7 @@ public class BlackJack {
 					player.clearHand();
 					dealer.clearHand();
 					bank.clearBet();
-				}
-				else{
+				} else {
 					// else allow hit or stand, NOT Split or Double
 					btnHit.setEnabled(true);
 					btnStand.setEnabled(true);
@@ -391,6 +404,7 @@ public class BlackJack {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gameState = GameState.DEALER_ACT;
 				// Show hole card.
 				dealer.getDealerHand().setShowHoleCard(true);
 				
