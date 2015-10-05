@@ -30,5 +30,8 @@ public class Dealer {
 	public void setShowingCard(Card showingCard) {
 		this.showingCard = showingCard;
 	}
-
+	
+	public void clearHand(){
+		this.dealerHand.clearHand();
+	}
 }

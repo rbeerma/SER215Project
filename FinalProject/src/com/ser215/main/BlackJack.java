@@ -158,7 +158,6 @@ public class BlackJack {
 				btnClearBet.setEnabled(false);
 				btnDeal.setEnabled(false);
 				
-				//dealer.clearTable();
 				//dealer.fillHand();
 				
 				playerHand1.addCard(deck.getNextCard());
@@ -169,6 +168,7 @@ public class BlackJack {
 				
 				player.setPlayerHand1(playerHand1);
 				dealer.setHand(dealerHand);
+				
 
 				System.out.println("Player hand: " + playerHand1.toString());
 				System.out.println("Dealer hand: " + dealerHand.toString());
@@ -207,6 +207,10 @@ public class BlackJack {
 						btnSplit.setEnabled(false);
 						btnDouble.setEnabled(false);
 						btnBuyInsurance.setEnabled(false);
+						
+						dealer.clearHand();
+						player.clearHand();
+						
 					}
 				}
 				
@@ -233,6 +237,9 @@ public class BlackJack {
 						btnSplit.setEnabled(false);
 						btnDouble.setEnabled(false);
 						btnBuyInsurance.setEnabled(false);
+						
+						dealer.clearHand();
+						player.clearHand();
 					}
 					else{
 						if(playerHand1.getCards().get(0).getValue() == playerHand1.getCards().get(1).getValue()){
@@ -283,6 +290,7 @@ public class BlackJack {
 			public void actionPerformed(ActionEvent e) {
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
+				bank.increaseBet(50);
 				
 			}
 			
@@ -294,6 +302,7 @@ public class BlackJack {
 			public void actionPerformed(ActionEvent e) {
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
+				bank.increaseBet(100);
 				
 			}
 			
@@ -330,6 +339,10 @@ public class BlackJack {
 					btnSplit.setEnabled(false);
 					btnDouble.setEnabled(false);
 					btnBuyInsurance.setEnabled(false);
+					
+					dealer.clearHand();
+					player.clearHand();
+					
 				}
 				else{
 					// else allow hit or stand, NOT Split or Double
@@ -382,6 +395,9 @@ public class BlackJack {
 				btnSplit.setEnabled(false);
 				btnDouble.setEnabled(false);
 				btnBuyInsurance.setEnabled(false);
+				
+				dealer.clearHand();
+				player.clearHand();
 			}
 			
 		});

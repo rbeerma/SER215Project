@@ -47,4 +47,8 @@ public class Hand {
 		
 		return temp;
 	}
+	
+	public void clearHand(){
+		this.cards.clear();
+	}
 }

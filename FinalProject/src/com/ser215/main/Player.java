@@ -56,4 +56,8 @@ public class Player {
 		return playerHand2;
 	}
 	
+	public void clearHand(){
+		this.playerHand1.clearHand();
+		this.playerHand2.clearHand();
+	}
 }

@@ -1,4 +1,4 @@
-package com.ser215.main;
+package src.com.ser215.main;
 public class Bank {
 	private double balance;
 	private final double MAX_BET = 500;
