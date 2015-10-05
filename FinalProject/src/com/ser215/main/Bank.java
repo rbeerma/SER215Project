@@ -62,6 +62,14 @@ public class Bank {
 		currentBet = 0;
 	}
 	
+	public void payoutEven() {
+		/**
+		 * Pays out the 1:1 return on bet.
+		 */
+		balance += currentBet;
+		currentBet = 0;
+	}
+	
 	/**
 	 * Increases the current bet by the new bet amount.
 	 * @param bet amount to be added to bet

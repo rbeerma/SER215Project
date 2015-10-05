@@ -185,15 +185,15 @@ public class BlackJack {
 					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, player is paid, payout even
 						
-						// TODO: Show Hole Card
-						//playerBank.payoutEven();
+						dealer.getDealerHand().setShowHoleCard(true);
+						bank.payoutEven();
 					}
 					else{
-						// TODO: Show Hole Card
+						dealer.getDealerHand().setShowHoleCard(true);
 						
 						// Player has blackjack, dealer doesn't, payout for blackjack
 						
-						//playerBank.payoutBlackjack();
+						bank.payoutBlackjack();
 						
 						//Enable betting buttons, all other buttons disabled
 						btnBet25.setEnabled(true);
@@ -219,7 +219,7 @@ public class BlackJack {
 					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, end turn.
 						
-						// TODO: Show Hole Card
+						dealer.getDealerHand().setShowHoleCard(true);
 						
 						//Enable betting buttons, all other buttons disabled
 						btnBet25.setEnabled(true);
@@ -319,7 +319,17 @@ public class BlackJack {
 				}
 				if(playerHand1.getTotalValue() > 21){
 					// if player has busted, go to bet phase.
-					//betPhase();
+					btnBet25.setEnabled(true);
+					btnBet50.setEnabled(true);
+					btnBet100.setEnabled(true);
+					btnClearBet.setEnabled(true);
+
+					btnDeal.setEnabled(false);
+					btnHit.setEnabled(false);
+					btnStand.setEnabled(false);
+					btnSplit.setEnabled(false);
+					btnDouble.setEnabled(false);
+					btnBuyInsurance.setEnabled(false);
 				}
 				else{
 					// else allow hit or stand, NOT Split or Double
@@ -336,7 +346,42 @@ public class BlackJack {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Show hole card.
+				dealer.getDealerHand().setShowHoleCard(true);
 				
+				boolean dealerDrawing = true;
+				
+				// Dealer fills hand until they have a value of 17.
+				while (dealerDrawing){
+					if(dealer.getDealerHand().getTotalValue() >= 17){
+						dealerDrawing = false;
+					}
+					else{
+						dealer.getDealerHand().addCard(deck.getNextCard());
+					}
+				}
+				
+				if(dealer.getDealerHand().getTotalValue() == player.getPlayerHand1().getTotalValue()){
+					// Payout even in case of draw
+					bank.payoutEven();
+				}
+				if(dealer.getDealerHand().getTotalValue() < player.getPlayerHand1().getTotalValue()){
+					// Payout normal in case player wins
+					bank.payoutNormal();
+				}
+
+				// Bet buttons available, all others unavailable.
+				btnBet25.setEnabled(true);
+				btnBet50.setEnabled(true);
+				btnBet100.setEnabled(true);
+				btnClearBet.setEnabled(true);
+
+				btnDeal.setEnabled(false);
+				btnHit.setEnabled(false);
+				btnStand.setEnabled(false);
+				btnSplit.setEnabled(false);
+				btnDouble.setEnabled(false);
+				btnBuyInsurance.setEnabled(false);
 			}
 			
 		});
