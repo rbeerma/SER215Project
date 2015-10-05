@@ -18,7 +18,7 @@ public class Card {
 	public Card(int suit, int pipValue) {
 		this.suit = suit;
 		this.pipValue = pipValue;
-		setValue(pipValue);
+		setInitialValue(pipValue);
 		try {
 			this.img = ImageIO.read(new File("images/" + this.toString() + ".jpg"));
 		} catch (IOException e) {
@@ -44,8 +44,19 @@ public class Card {
 		return value;
 	}
 
-	public void setValue(int pipVal) {
-		if (pipVal >= 9) {
+	public void setValue(int value) {
+		this.value = value;
+	}
+	
+	/* This method sets the initial value of each card to its pipValue
+	 * After the deal, or upon hitting, the hand will be reviewed for
+	 * any Aces and the cards value will be adjusted to 11 as needed
+	 */
+	public void setInitialValue(int pipVal) {
+		if (pipVal == 0) {
+			// this is an ace
+			this.value = 11;
+		} else if (pipVal >= 9) {
 			this.value = 10;
 		} else {
 			this.value = pipVal + 1;
@@ -58,6 +69,10 @@ public class Card {
 
 	public void setPipValue(int pipValue) {
 		this.pipValue = pipValue;
+	}
+	
+	public boolean isAce() {
+		return pipValue == 0;
 	}
 	
 	public BufferedImage getImg() {
