@@ -6,8 +6,10 @@ import java.text.DecimalFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.Component;
@@ -18,15 +20,15 @@ public class BlackJack {
 	private Dealer dealer;
 	private Player player;
 	private DecimalFormat df = new DecimalFormat("#.00");
-	private GameState gameState;
+	public static GameState gameState;
 	
 	public GameState getGameState() {
 		return gameState;
 	}
 
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
-	}
+	/*public void setGameState(GameState gameState) {
+		gameState = gameState;
+	}*/
 
 	/**
 	 * Launch the application.
@@ -60,7 +62,7 @@ public class BlackJack {
 		dealer = new Dealer();
 		Deck deck = new Deck();
 		Hand playerHand1 = new Hand();
-		Hand playerHand2 = new Hand();
+		//Hand playerHand2 = new Hand();
 		Hand dealerHand = new Hand();
 		Bank bank = new Bank();
 		bank.setBalance(1000.00);
@@ -178,6 +180,16 @@ public class BlackJack {
 		TablePanel tablePanel = new TablePanel();
 		tablePanel.setBounds(0, 0, 820, 420);
 		frame.getContentPane().add(tablePanel);
+		
+		JOptionPane optionPane = new JOptionPane(JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+		Object[] options = new String[] {"Yes", "No"};
+		optionPane.setOptions(options);
+		JDialog dialog = optionPane.createDialog(new JFrame(), "What next?");
+		dialog.setContentPane(optionPane);
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setVisible(false);
+		dialog.pack();
+		dialog.setLocationRelativeTo(frame);
 				
 		/* Button Listeners
 		*  The majority of the game logic should be encapsulated in these listeners,
@@ -203,6 +215,7 @@ public class BlackJack {
 				dealer.setShowingCard(dealerHand.getCards().get(0));
 				playerHand1.addCard(deck.getNextCard());
 				dealerHand.addCard(deck.getNextCard());
+				dealerHand.setShowHoleCard(false);
 				
 				player.setPlayerHand1(playerHand1);
 				dealer.setHand(dealerHand);
@@ -221,11 +234,11 @@ public class BlackJack {
 					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, player is paid, payout even
 						
-						dealer.getDealerHand().setShowHoleCard(true);
+						dealerHand.setShowHoleCard(true);
 						//playerBank.payoutEven();
 					}
 					else{
-						dealer.getDealerHand().setShowHoleCard(true);
+						dealerHand.setShowHoleCard(true);
 						
 						// Player has blackjack, dealer doesn't, payout for blackjack
 						
@@ -258,7 +271,7 @@ public class BlackJack {
 					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, end turn.
 						
-						dealer.getDealerHand().setShowHoleCard(true);
+						dealerHand.setShowHoleCard(true);
 						
 						//Enable betting buttons, all other buttons disabled
 						btnBet25.setEnabled(true);
@@ -273,8 +286,10 @@ public class BlackJack {
 						//btnDouble.setEnabled(false);
 						//btnBuyInsurance.setEnabled(false);
 						
-						player.clearHand();
-						dealer.clearHand();
+						//player.clearHand();
+						//dealer.clearHand();
+						playerHand1.clear();
+						dealerHand.clear();
 					}
 					else{
 						if(playerHand1.getCards().get(0).getValue() == playerHand1.getCards().get(1).getValue()){
@@ -386,9 +401,18 @@ public class BlackJack {
 					//btnDouble.setEnabled(false);
 					//btnBuyInsurance.setEnabled(false);
 					
-					player.clearHand();
-					dealer.clearHand();
-					bank.clearBet();
+					optionPane.setMessage("You busted. Keep playing?\n(Selecting 'No' will close the window)");
+					dialog.setVisible(true);
+					String selection = (String)optionPane.getValue();
+					
+					if (selection == "Yes") {
+						player.clearHand();
+						dealer.clearHand();
+						bank.clearBet();
+						dealerHand.setShowHoleCard(true);
+					} else if (selection == null || selection == "No") {
+						frame.dispose();
+					}
 				} else {
 					// else allow hit or stand, NOT Split or Double
 					btnHit.setEnabled(true);
@@ -406,25 +430,25 @@ public class BlackJack {
 			public void actionPerformed(ActionEvent e) {
 				gameState = GameState.DEALER_ACT;
 				// Show hole card.
-				dealer.getDealerHand().setShowHoleCard(true);
+				dealerHand.setShowHoleCard(true);
 				
 				boolean dealerDrawing = true;
 				
 				while(dealerDrawing){
 					//Dealer draws until hand value >= 17
-					if(dealer.getDealerHand().getTotalValue() >= 17){
+					if(dealerHand.getTotalValue() >= 17){
 						dealerDrawing = false;
 					}
 					else{
-						dealer.getDealerHand().addCard(deck.getNextCard());
+						dealerHand.addCard(deck.getNextCard());
 					}
 				}
 
-				if(dealer.getDealerHand().getTotalValue() == player.getPlayerHand1().getTotalValue()){
+				if(dealerHand.getTotalValue() == playerHand1.getTotalValue()){
 					bank.payoutEven();
 				}
 				
-				if(dealer.getDealerHand().getTotalValue() < player.getPlayerHand1().getTotalValue()){
+				if(dealerHand.getTotalValue() < playerHand1.getTotalValue()){
 					bank.payoutNormal();
 				}
 
@@ -441,8 +465,10 @@ public class BlackJack {
 				//btnDouble.setEnabled(false);
 				//btnBuyInsurance.setEnabled(false);
 				
-				player.clearHand();
-				dealer.clearHand();
+				//player.clearHand();
+				//dealer.clearHand();
+				playerHand1.clear();
+				dealerHand.clear();
 			}
 			
 		});
@@ -461,4 +487,5 @@ public class BlackJack {
 	public String assessHands() {
 		return "";
 	}
+	
 }

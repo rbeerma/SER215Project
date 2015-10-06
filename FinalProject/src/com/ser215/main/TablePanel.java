@@ -31,13 +31,14 @@ class TablePanel extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		GameState state = BlackJack.gameState;
 		
-		if (Deck.cardsDealt) {
+		if (state == GameState.PLAYER_ACT || state == GameState.DEALER_ACT) {
 			int dealerX = 0;
 			int playerX = 0;
 			
 			for (Card card : Dealer.getDealerHand().getCards()) {
-				if (dealerX < Dealer.getDealerHand().CARD_LIMIT) {
+				if (dealerX < Hand.CARD_LIMIT) {
 					BufferedImage cardImg = card.getImg();
 					g.drawImage(cardImg, DEALER_X[dealerX], DEALER_Y, null);
 					dealerX += 1;
@@ -49,12 +50,15 @@ class TablePanel extends JPanel {
 			}
 			
 			for (Card card : Player.getPlayerHand1().getCards()) {
-				if (playerX < Player.getPlayerHand1().CARD_LIMIT) {
+				if (playerX < Hand.CARD_LIMIT) {
 					BufferedImage cardImg = card.getImg();
 					g.drawImage(cardImg, PLAYER_X[playerX], PLAYER_Y, null);
 					playerX += 1;
 				}
 			}
+		}
+		
+		if (state == GameState.PLAYER_BUST) {
 			
 		}
 		repaint();

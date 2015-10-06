@@ -63,7 +63,7 @@ public class Hand {
 		return temp;
 	}
 	
-	public void clear(){
+	public void clear() {
 		this.cards.clear();
 		this.totalValue = 0;
 	}
