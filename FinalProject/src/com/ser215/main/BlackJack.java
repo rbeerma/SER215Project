@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.Component;
+import javax.swing.SwingConstants;
 
 public class BlackJack {
 
@@ -38,6 +39,7 @@ public class BlackJack {
 			public void run() {
 				try {
 					BlackJack window = new BlackJack();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,7 +64,6 @@ public class BlackJack {
 		dealer = new Dealer();
 		Deck deck = new Deck();
 		Hand playerHand1 = new Hand();
-		//Hand playerHand2 = new Hand();
 		Hand dealerHand = new Hand();
 		Bank bank = new Bank();
 		bank.setBalance(1000.00);
@@ -79,22 +80,22 @@ public class BlackJack {
 		btnDeal.setEnabled(false);
 				
 		JButton btnClearBet = new JButton("Clear Bet");
-		btnClearBet.setBounds(20, 248, 120, 44);
+		btnClearBet.setBounds(20, 273, 120, 44);
 		btnClearBet.setEnabled(false);
 						
 		JButton btnBet25 = new JButton("Bet $25");
 		btnBet25.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnBet25.setBounds(20, 51, 120, 44);
+		btnBet25.setBounds(20, 75, 120, 44);
 		btnBet25.setEnabled(true);
 						
 		JButton btnBet50 = new JButton("Bet $50");
 		btnBet50.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnBet50.setBounds(20, 110, 120, 44);
+		btnBet50.setBounds(20, 132, 120, 44);
 		btnBet50.setEnabled(true);
 				
 		JButton btnBet100 = new JButton("Bet $100");
 		btnBet100.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnBet100.setBounds(20, 167, 120, 44);
+		btnBet100.setBounds(20, 189, 120, 44);
 		btnBet100.setEnabled(true);
 			
 		JButton btnHit = new JButton("Hit");
@@ -104,21 +105,6 @@ public class BlackJack {
 		JButton btnStand = new JButton("Stand");
 		btnStand.setBounds(494, 20, 120, 44);
 		btnStand.setEnabled(false);
-		
-		// Removing these buttons for now
-		
-		/*JButton btnSplit = new JButton("Split");
-		btnSplit.setBounds(348, 20, 120, 44);
-		btnSplit.setEnabled(false);
-		
-		JButton btnDouble = new JButton("Double");
-		btnDouble.setBounds(504, 20, 120, 44);
-		btnDouble.setEnabled(false);
-		
-		JButton btnBuyInsurance = new JButton("Buy Insurance");
-		btnBuyInsurance.setBounds(660, 20, 120, 44);
-		btnBuyInsurance.setEnabled(false);*/
-		// end button definitions
 		
 		// build the bottom panel
 		JPanel bottomPanel = new JPanel();
@@ -150,9 +136,6 @@ public class BlackJack {
 		JLabel lblDealerValue = new JLabel("");
 		lblDealerValue.setBounds(119, 13, 56, 16);
 		bottomPanel.add(lblDealerValue);
-		//bottomPanel.add(btnSplit);
-		//bottomPanel.add(btnDouble);
-		//bottomPanel.add(btnBuyInsurance);
 		
 		// build the right panel
 		JPanel rightPanel = new JPanel();
@@ -168,6 +151,7 @@ public class BlackJack {
 		rightPanel.add(lblBank);
 		
 		JLabel lblBalance = new JLabel(String.valueOf(df.format(bank.getBalance())));
+		lblBalance.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblBalance.setBounds(72, 22, 79, 16);
 		
 		rightPanel.add(lblBalance);
@@ -177,11 +161,16 @@ public class BlackJack {
 		rightPanel.add(btnDeal);
 		rightPanel.add(btnClearBet);
 		
+		JLabel lblmaxBet = new JLabel("(Max Bet = $500)");
+		lblmaxBet.setBounds(20, 46, 120, 16);
+		rightPanel.add(lblmaxBet);
+		
 		TablePanel tablePanel = new TablePanel();
 		tablePanel.setBounds(0, 0, 820, 420);
 		frame.getContentPane().add(tablePanel);
 		
-		JOptionPane optionPane = new JOptionPane(JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+		// build an option dialog to show when each hand is complete
+		JOptionPane optionPane = new JOptionPane(JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		Object[] options = new String[] {"Yes", "No"};
 		optionPane.setOptions(options);
 		JDialog dialog = optionPane.createDialog(new JFrame(), "What next?");
@@ -189,7 +178,7 @@ public class BlackJack {
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(false);
 		dialog.pack();
-		dialog.setLocationRelativeTo(frame);
+		dialog.setLocationRelativeTo(null);
 				
 		/* Button Listeners
 		*  The majority of the game logic should be encapsulated in these listeners,
@@ -207,9 +196,6 @@ public class BlackJack {
 				btnClearBet.setEnabled(false);
 				btnDeal.setEnabled(false);
 				
-				//dealer.clearTable();
-				//dealer.fillHand();
-				
 				playerHand1.addCard(deck.getNextCard());
 				dealerHand.addCard(deck.getNextCard());
 				dealer.setShowingCard(dealerHand.getCards().get(0));
@@ -220,9 +206,9 @@ public class BlackJack {
 				player.setPlayerHand1(playerHand1);
 				dealer.setHand(dealerHand);
 				lblPlayerValue.setText(String.valueOf(playerHand1.getTotalValue()));
-				lblDealerValue.setText(String.valueOf(dealerHand.getTotalValue()));
 				
-				Deck.cardsDealt = true;
+				// ***** comment out the next line after testing *****
+				lblDealerValue.setText(String.valueOf(dealerHand.getTotalValue()));
 				
 				if (playerHand1.getTotalValue() == 21){
 					//If Player Has blackjack...
@@ -253,12 +239,9 @@ public class BlackJack {
 						btnDeal.setEnabled(false);
 						btnHit.setEnabled(false);
 						btnStand.setEnabled(false);
-						//btnSplit.setEnabled(false);
-						//btnDouble.setEnabled(false);
-						//btnBuyInsurance.setEnabled(false);
 						
-						player.clearHand();
-						dealer.clearHand();
+						playerHand1.clear();
+						dealerHand.clear();
 					}
 				}
 				
@@ -282,31 +265,41 @@ public class BlackJack {
 						btnDeal.setEnabled(false);
 						btnHit.setEnabled(false);
 						btnStand.setEnabled(false);
-						//btnSplit.setEnabled(false);
-						//btnDouble.setEnabled(false);
-						//btnBuyInsurance.setEnabled(false);
-						
-						//player.clearHand();
-						//dealer.clearHand();
+
 						playerHand1.clear();
 						dealerHand.clear();
 					}
 					else{
 						if(playerHand1.getCards().get(0).getValue() == playerHand1.getCards().get(1).getValue()){
 							// Allow split if first two cards have equal value
-							//btnSplit.setEnabled(true);
+
 						}
 						
 						// Allow hit, stand, double
 						
 						btnHit.setEnabled(true);
 						btnStand.setEnabled(true);
-						//btnDouble.setEnabled(true);
 					}
 				}
 				
+				// use this block to update and show dialog after each hand. Change message based on hand result.
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+					optionPane.setMessage(getMessage(gameState));
+					dialog.setVisible(true);
+					String selection = (String)optionPane.getValue();
+										
+					if (selection == "Yes") {
+						playerHand1.clear();
+						dealerHand.clear();
+						bank.clearBet();
+						dealerHand.setShowHoleCard(true);
+					} else if (selection == null || selection == "No") {
+						frame.dispose();
+					}
+				}
+				// end dialog block
+				
 			}
-			
 			
 		});
 		
@@ -332,7 +325,13 @@ public class BlackJack {
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
 				bank.increaseBet(25);
-				//if (bank.getCurrentBet())
+				
+				// disable betting buttons if they've hit the limit or don't have enough money
+				if (bank.getBalance() < 25 || bank.getCurrentBet() >= Bank.MAX_BET) {
+					btnBet25.setEnabled(false);
+					btnBet50.setEnabled(false);
+					btnBet100.setEnabled(false);
+				}
 				
 				lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 			}
@@ -348,6 +347,19 @@ public class BlackJack {
 				btnClearBet.setEnabled(true);
 				bank.increaseBet(50);
 				
+				// disable betting buttons if they've hit the limit or don't have enough money
+				if (bank.getBalance() < 50 || bank.getCurrentBet() >= Bank.MAX_BET) {
+					if (bank.getBalance() < 25) {
+						btnBet25.setEnabled(false);
+					}
+					btnBet50.setEnabled(false);
+					btnBet100.setEnabled(false);
+				}
+				
+				if (bank.getCurrentBet() >= Bank.MAX_BET) {
+					btnBet25.setEnabled(false);
+				}
+				
 				lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 				
 			}
@@ -362,6 +374,22 @@ public class BlackJack {
 				btnDeal.setEnabled(true);
 				btnClearBet.setEnabled(true);
 				bank.increaseBet(100);
+				
+				// disable betting buttons if they've hit the limit or don't have enough money
+				if (bank.getBalance() < 100 || bank.getCurrentBet() >= Bank.MAX_BET) {
+					if (bank.getBalance() < 50) {
+						btnBet50.setEnabled(false);
+						if (bank.getBalance() < 25) {
+							btnBet25.setEnabled(false);
+						}
+					}
+					btnBet100.setEnabled(false);
+				}
+				
+				if (bank.getCurrentBet() >= Bank.MAX_BET) {
+					btnBet25.setEnabled(false);
+					btnBet50.setEnabled(false);
+				}
 				
 				lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 				
@@ -384,9 +412,7 @@ public class BlackJack {
 					// Stand unavailable.
 					btnDeal.setEnabled(false);
 					btnHit.setEnabled(false);
-					//btnSplit.setEnabled(false);
-					//btnDouble.setEnabled(false);
-					//btnBuyInsurance.setEnabled(false);
+
 				} else if (playerHand1.getTotalValue() > 21){
 					// if player has busted, allow betting
 					btnBet25.setEnabled(true);
@@ -397,14 +423,20 @@ public class BlackJack {
 					btnDeal.setEnabled(false);
 					btnHit.setEnabled(false);
 					btnStand.setEnabled(false);
-					//btnSplit.setEnabled(false);
-					//btnDouble.setEnabled(false);
-					//btnBuyInsurance.setEnabled(false);
 					
-					optionPane.setMessage("You busted. Keep playing?\n(Selecting 'No' will close the window)");
+					gameState = GameState.PLAYER_BUST;
+				} else {
+					// else allow hit or stand, NOT Split or Double
+					btnHit.setEnabled(true);
+					btnStand.setEnabled(true);
+				}
+				
+				// use this block to update and show dialog after each hand. Change message based on hand result.
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();
-					
+										
 					if (selection == "Yes") {
 						player.clearHand();
 						dealer.clearHand();
@@ -413,13 +445,8 @@ public class BlackJack {
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
 					}
-				} else {
-					// else allow hit or stand, NOT Split or Double
-					btnHit.setEnabled(true);
-					btnStand.setEnabled(true);
-					//btnSplit.setEnabled(false);
-					//btnDouble.setEnabled(false);
 				}
+				// end dialog block
 			}
 			
 		});
@@ -461,26 +488,30 @@ public class BlackJack {
 				btnDeal.setEnabled(false);
 				btnHit.setEnabled(false);
 				btnStand.setEnabled(false);
-				//btnSplit.setEnabled(false);
-				//btnDouble.setEnabled(false);
-				//btnBuyInsurance.setEnabled(false);
-				
-				//player.clearHand();
-				//dealer.clearHand();
+
 				playerHand1.clear();
 				dealerHand.clear();
+				
+				// use this block to update and show dialog after each hand. Change message based on hand result.
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+					optionPane.setMessage(getMessage(gameState));
+					dialog.setVisible(true);
+					String selection = (String)optionPane.getValue();
+										
+					if (selection == "Yes") {
+						player.clearHand();
+						dealer.clearHand();
+						bank.clearBet();
+						dealerHand.setShowHoleCard(true);
+					} else if (selection == null || selection == "No") {
+						frame.dispose();
+					}
+				}
+				// end dialog block
 			}
 			
 		});
 		
-		/*btnSplit.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-			
-		});*/
 		// end button listeners
 	}
 	
@@ -488,4 +519,23 @@ public class BlackJack {
 		return "";
 	}
 	
+	// This method returns an appropriate message given the current game state.
+	// More states can be added to the GameState enum as needed to add other messages.
+	public String getMessage(GameState gameState) {
+		String msg = "";
+		
+		switch(gameState) {
+			case PLAYER_BUST: msg = "You busted. Keep playing?";
+				break;
+			case PLAYER_WIN: msg = "You win! Keep playing?";
+				break;
+			case DEALER_WIN: msg = "Dealer wins. Keep playing?";
+				break;
+			case BANK_EMPTY: msg = "You're out of money. Want to start again?";
+				break;
+			default: msg = "";
+		}
+		
+		return msg;
+	}
 }

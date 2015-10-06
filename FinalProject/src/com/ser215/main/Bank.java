@@ -1,7 +1,7 @@
 package com.ser215.main;
 public class Bank {
 	private double balance;
-	private final double MAX_BET = 500;
+	public static final double MAX_BET = 500;
 	private double currentBet;
 	private double splitBet;
 	
