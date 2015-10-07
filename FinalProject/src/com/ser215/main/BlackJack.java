@@ -180,10 +180,10 @@ public class BlackJack {
 		Object[] options = new String[] {"Yes", "No"};
 		optionPane.setOptions(options);
 		JDialog dialog = optionPane.createDialog(new JFrame(), "What next?");
+		dialog.setBounds(0, 0, 400, 150);
 		dialog.setContentPane(optionPane);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(false);
-		dialog.pack();
 		dialog.setLocationRelativeTo(null);
 				
 		/* Button Listeners
@@ -223,6 +223,7 @@ public class BlackJack {
 				
 				if (playerHand1.getTotalValue() == 21){
 					//If Player Has blackjack...
+					gameState = GameState.PLAYER_WIN;
 					
 					if (dealer.getShowingCard().getPipValue() == 0){
 						// TODO: Offer Insurance -- need a way for this to be resolved and then
@@ -322,6 +323,7 @@ public class BlackJack {
 				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
+					System.out.println("deal");
 					String selection = (String)optionPane.getValue();
 										
 					if (selection == "Yes") {
@@ -446,6 +448,7 @@ public class BlackJack {
 					// If player has 21, make all other play buttons except 
 					// Stand unavailable.
 					btnHit.setEnabled(false);
+					gameState = GameState.PLAYER_WIN;
 
 				} else if (playerHand1.getTotalValue() > 21){
 					// if player has busted, allow betting
@@ -474,7 +477,7 @@ public class BlackJack {
 				}
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				/*if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();
@@ -485,7 +488,7 @@ public class BlackJack {
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
 					}
-				}*/
+				}
 				// end dialog block
 			}
 			
@@ -511,15 +514,23 @@ public class BlackJack {
 						lblDealerValue.setText(String.valueOf(dealerHand.getTotalValue()));
 					}
 				}
+				
+				if(dealerHand.getTotalValue() > playerHand1.getTotalValue() && dealerHand.getTotalValue() < 21) {
+					bank.payoutPush();
+					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+					gameState = GameState.DEALER_WIN;
+				}
 
 				if(dealerHand.getTotalValue() == playerHand1.getTotalValue()){
 					bank.payoutPush();
 					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+					gameState = GameState.DEALER_WIN;
 				}
 				
 				if(dealerHand.getTotalValue() < playerHand1.getTotalValue() || dealerHand.getTotalValue() > 21){
 					bank.payoutWin();
 					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+					gameState = GameState.PLAYER_WIN;
 				}
 
 				bank.clearBet();
@@ -541,7 +552,7 @@ public class BlackJack {
 				btnStand.setEnabled(false);
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				/* if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();
@@ -551,7 +562,7 @@ public class BlackJack {
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
 					}
-				}*/
+				}
 				// end dialog block
 			}
 			
