@@ -210,6 +210,7 @@ public class BlackJack {
 				dealerHand.addCard(deck.getNextCard());
 				dealer.setShowingCard(dealerHand.getCards().get(0));
 				playerHand1.addCard(deck.getNextCard());
+				playerHand1.updateValue();
 				dealerHand.addCard(deck.getNextCard());
 				dealerHand.setShowHoleCard(false);
 				

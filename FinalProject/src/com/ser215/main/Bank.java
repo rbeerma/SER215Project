@@ -58,7 +58,7 @@ public class Bank {
 	 * Pays out the 3:2 return on bet.
 	 */
 	public void payoutBlackjack() {
-		balance += (5/2) * currentBet;
+		balance += 2.5 * currentBet;
 		currentBet = 0;
 	}
 	
