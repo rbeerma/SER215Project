@@ -499,7 +499,7 @@ public class BlackJack {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				gameState = GameState.DEALER_ACT;
-				// Show hole card.
+				//  Show hole card.
 				dealerHand.setShowHoleCard(true);
 				
 				boolean dealerDrawing = true;
