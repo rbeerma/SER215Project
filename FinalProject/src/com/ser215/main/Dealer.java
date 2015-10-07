@@ -3,7 +3,7 @@ package com.ser215.main;
 public class Dealer {
 	private static Hand dealerHand;
 	private Card showingCard;
-	
+	private Card holeCard;
 	
 	public Dealer() {}
 	
@@ -29,6 +29,14 @@ public class Dealer {
 	
 	public void setShowingCard(Card showingCard) {
 		this.showingCard = showingCard;
+	}
+	
+	public Card getHoleCard() {
+		return holeCard;
+	}
+	
+	public void setHoleCard(Card holeCard) {
+		this.holeCard = holeCard;
 	}
 	
 	public void clearHand(){

@@ -27,9 +27,9 @@ public class BlackJack {
 		return gameState;
 	}
 
-	/*public void setGameState(GameState gameState) {
-		gameState = gameState;
-	}*/
+	public void setGameState(GameState newState) {
+		gameState = newState;
+	}
 
 	/**
 	 * Launch the application.
@@ -144,7 +144,7 @@ public class BlackJack {
 		frame.getContentPane().add(rightPanel);
 		rightPanel.setLayout(null);
 		
-		//build the 
+		//build the labels and buttons
 		JLabel lblBank = new JLabel("Bank:  $");
 		lblBank.setBounds(20, 22, 51, 16);
 		
@@ -155,15 +155,21 @@ public class BlackJack {
 		lblBalance.setBounds(72, 22, 79, 16);
 		
 		rightPanel.add(lblBalance);
+		
+		JLabel lblBet = new JLabel("Bet:  $");
+		lblBet.setBounds(20, 46, 120, 16);
+		rightPanel.add(lblBet);
+		
+		JLabel lblBetAmt = new JLabel(String.valueOf(df.format(bank.getCurrentBet())));
+		lblBetAmt.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblBetAmt.setBounds(72, 46, 79, 16);
+		rightPanel.add(lblBetAmt);
+		
 		rightPanel.add(btnBet25);
 		rightPanel.add(btnBet50);
 		rightPanel.add(btnBet100);
 		rightPanel.add(btnDeal);
 		rightPanel.add(btnClearBet);
-		
-		JLabel lblmaxBet = new JLabel("(Max Bet = $500)");
-		lblmaxBet.setBounds(20, 46, 120, 16);
-		rightPanel.add(lblmaxBet);
 		
 		TablePanel tablePanel = new TablePanel();
 		tablePanel.setBounds(0, 0, 820, 420);
@@ -188,6 +194,10 @@ public class BlackJack {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Clear the previous hand, if any
+				playerHand1.clear();
+				dealerHand.clear();
+				
 				gameState = GameState.PLAYER_ACT;
 				// Make bet buttons unavailable
 				btnBet25.setEnabled(false);
@@ -221,27 +231,49 @@ public class BlackJack {
 						//If dealer is showing 10 and has blackjack, player is paid, payout even
 						
 						dealerHand.setShowHoleCard(true);
-						//playerBank.payoutEven();
-					}
-					else{
-						dealerHand.setShowHoleCard(true);
-						
-						// Player has blackjack, dealer doesn't, payout for blackjack
-						
-						//playerBank.payoutBlackjack();
+						bank.payoutPush();
+						bank.clearBet();
+						lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 						
 						//Enable betting buttons, all other buttons disabled
-						btnBet25.setEnabled(true);
-						btnBet50.setEnabled(true);
-						btnBet100.setEnabled(true);
+						if (bank.getBalance() >= 25) {
+							btnBet25.setEnabled(true);
+						}
+						if (bank.getBalance() >= 50) {
+							btnBet50.setEnabled(true);
+						}
+						if (bank.getBalance() >= 100) {
+							btnBet100.setEnabled(true);
+						}
 						btnClearBet.setEnabled(true);
 
 						btnDeal.setEnabled(false);
 						btnHit.setEnabled(false);
 						btnStand.setEnabled(false);
+					}
+					else{
+						dealerHand.setShowHoleCard(true);
 						
-						playerHand1.clear();
-						dealerHand.clear();
+						// Player has blackjack, dealer doesn't, payout for blackjack
+						bank.payoutBlackjack();
+						bank.clearBet();
+						lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+						
+						//Enable betting buttons, all other buttons disabled
+						if (bank.getBalance() >= 25) {
+							btnBet25.setEnabled(true);
+						}
+						if (bank.getBalance() >= 50) {
+							btnBet50.setEnabled(true);
+						}
+						if (bank.getBalance() >= 100) {
+							btnBet100.setEnabled(true);
+						}
+						btnClearBet.setEnabled(true);
+
+						btnDeal.setEnabled(false);
+						btnHit.setEnabled(false);
+						btnStand.setEnabled(false);
 					}
 				}
 				
@@ -257,17 +289,20 @@ public class BlackJack {
 						dealerHand.setShowHoleCard(true);
 						
 						//Enable betting buttons, all other buttons disabled
-						btnBet25.setEnabled(true);
-						btnBet50.setEnabled(true);
-						btnBet100.setEnabled(true);
+						if (bank.getBalance() >= 25) {
+							btnBet25.setEnabled(true);
+						}
+						if (bank.getBalance() >= 50) {
+							btnBet50.setEnabled(true);
+						}
+						if (bank.getBalance() >= 100) {
+							btnBet100.setEnabled(true);
+						}
 						btnClearBet.setEnabled(true);
 
 						btnDeal.setEnabled(false);
 						btnHit.setEnabled(false);
 						btnStand.setEnabled(false);
-
-						playerHand1.clear();
-						dealerHand.clear();
 					}
 					else{
 						if(playerHand1.getCards().get(0).getValue() == playerHand1.getCards().get(1).getValue()){
@@ -313,6 +348,7 @@ public class BlackJack {
 				bank.setCurrentBet(0.00);
 				
 				lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+				lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 			}
 			
 		});
@@ -327,13 +363,18 @@ public class BlackJack {
 				bank.increaseBet(25);
 				
 				// disable betting buttons if they've hit the limit or don't have enough money
-				if (bank.getBalance() < 25 || bank.getCurrentBet() >= Bank.MAX_BET) {
+				if (bank.getBalance() < 25 || bank.getCurrentBet()+25 > Bank.MAX_BET) {
 					btnBet25.setEnabled(false);
+				}
+				if (bank.getBalance() < 50 || bank.getCurrentBet()+50 > Bank.MAX_BET) {
 					btnBet50.setEnabled(false);
+				}
+				if (bank.getBalance() < 100 || bank.getCurrentBet()+100 > Bank.MAX_BET) {
 					btnBet100.setEnabled(false);
 				}
 				
 				lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+				lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 			}
 			
 		});
@@ -348,20 +389,18 @@ public class BlackJack {
 				bank.increaseBet(50);
 				
 				// disable betting buttons if they've hit the limit or don't have enough money
-				if (bank.getBalance() < 50 || bank.getCurrentBet() >= Bank.MAX_BET) {
-					if (bank.getBalance() < 25) {
-						btnBet25.setEnabled(false);
-					}
+				if (bank.getBalance() < 25 || bank.getCurrentBet()+25 > Bank.MAX_BET) {
+					btnBet25.setEnabled(false);
+				}
+				if (bank.getBalance() < 50 || bank.getCurrentBet()+50 > Bank.MAX_BET) {
 					btnBet50.setEnabled(false);
+				}
+				if (bank.getBalance() < 100 || bank.getCurrentBet()+100 > Bank.MAX_BET) {
 					btnBet100.setEnabled(false);
 				}
 				
-				if (bank.getCurrentBet() >= Bank.MAX_BET) {
-					btnBet25.setEnabled(false);
-				}
-				
 				lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
-				
+				lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 			}
 			
 		});
@@ -376,23 +415,18 @@ public class BlackJack {
 				bank.increaseBet(100);
 				
 				// disable betting buttons if they've hit the limit or don't have enough money
-				if (bank.getBalance() < 100 || bank.getCurrentBet() >= Bank.MAX_BET) {
-					if (bank.getBalance() < 50) {
-						btnBet50.setEnabled(false);
-						if (bank.getBalance() < 25) {
-							btnBet25.setEnabled(false);
-						}
-					}
+				if (bank.getBalance() < 25 || bank.getCurrentBet()+25 > Bank.MAX_BET) {
+					btnBet25.setEnabled(false);
+				}
+				if (bank.getBalance() < 50 || bank.getCurrentBet()+50 > Bank.MAX_BET) {
+					btnBet50.setEnabled(false);
+				}
+				if (bank.getBalance() < 100 || bank.getCurrentBet()+100 > Bank.MAX_BET) {
 					btnBet100.setEnabled(false);
 				}
 				
-				if (bank.getCurrentBet() >= Bank.MAX_BET) {
-					btnBet25.setEnabled(false);
-					btnBet50.setEnabled(false);
-				}
-				
 				lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
-				
+				lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 			}
 			
 		});
@@ -408,16 +442,23 @@ public class BlackJack {
 				lblPlayerValue.setText(String.valueOf(playerHand1.getTotalValue()));
 				
 				if (playerHand1.getTotalValue() == 21) {
-					// If player has blackjack, make all other play buttons except 
+					// If player has 21, make all other play buttons except 
 					// Stand unavailable.
-					btnDeal.setEnabled(false);
 					btnHit.setEnabled(false);
 
 				} else if (playerHand1.getTotalValue() > 21){
 					// if player has busted, allow betting
-					btnBet25.setEnabled(true);
-					btnBet50.setEnabled(true);
-					btnBet100.setEnabled(true);
+					bank.clearBet();
+					
+					if (bank.getBalance() >= 25) {
+						btnBet25.setEnabled(true);
+					}
+					if (bank.getBalance() >= 50) {
+						btnBet50.setEnabled(true);
+					}
+					if (bank.getBalance() >= 100) {
+						btnBet100.setEnabled(true);
+					}
 					btnClearBet.setEnabled(true);
 
 					btnDeal.setEnabled(false);
@@ -432,20 +473,18 @@ public class BlackJack {
 				}
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+				/*if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();
 										
 					if (selection == "Yes") {
-						player.clearHand();
-						dealer.clearHand();
 						bank.clearBet();
 						dealerHand.setShowHoleCard(true);
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
 					}
-				}
+				}*/
 				// end dialog block
 			}
 			
@@ -468,45 +507,50 @@ public class BlackJack {
 					}
 					else{
 						dealerHand.addCard(deck.getNextCard());
+						lblDealerValue.setText(String.valueOf(dealerHand.getTotalValue()));
 					}
 				}
 
 				if(dealerHand.getTotalValue() == playerHand1.getTotalValue()){
-					bank.payoutEven();
+					bank.payoutPush();
+					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 				}
 				
-				if(dealerHand.getTotalValue() < playerHand1.getTotalValue()){
-					bank.payoutNormal();
+				if(dealerHand.getTotalValue() < playerHand1.getTotalValue() || dealerHand.getTotalValue() > 21){
+					bank.payoutWin();
+					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 				}
 
+				bank.clearBet();
+				
 				// Bet buttons available, all others unavailable
-				btnBet25.setEnabled(true);
-				btnBet50.setEnabled(true);
-				btnBet100.setEnabled(true);
+				if (bank.getBalance() >= 25) {
+					btnBet25.setEnabled(true);
+				}
+				if (bank.getBalance() >= 50) {
+					btnBet50.setEnabled(true);
+				}
+				if (bank.getBalance() >= 100) {
+					btnBet100.setEnabled(true);
+				}
 				btnClearBet.setEnabled(true);
 
 				btnDeal.setEnabled(false);
 				btnHit.setEnabled(false);
 				btnStand.setEnabled(false);
-
-				playerHand1.clear();
-				dealerHand.clear();
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+				/* if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();
 										
 					if (selection == "Yes") {
-						player.clearHand();
-						dealer.clearHand();
-						bank.clearBet();
-						dealerHand.setShowHoleCard(true);
+						
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
 					}
-				}
+				}*/
 				// end dialog block
 			}
 			

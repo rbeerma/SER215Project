@@ -47,9 +47,9 @@ public class Bank {
 	}
 
 	/**
-	 * Pays out the normal 2:1 return on bet.
+	 * Pays out the normal 1:1 return on bet.
 	 */
-	public void payoutNormal() {
+	public void payoutWin() {
 		balance += 2 * currentBet;
 		currentBet = 0;
 	}
@@ -58,7 +58,7 @@ public class Bank {
 	 * Pays out the 3:2 return on bet.
 	 */
 	public void payoutBlackjack() {
-		balance += (3/2) * currentBet;
+		balance += (5/2) * currentBet;
 		currentBet = 0;
 	}
 	
@@ -83,7 +83,7 @@ public class Bank {
 		currentBet = 0;
 	}
 
-	public void payoutEven() {
+	public void payoutPush() {
 		balance += currentBet;
 		currentBet = 0;
 		

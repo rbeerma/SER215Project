@@ -22,7 +22,6 @@ public class Card {
 		try {
 			this.img = ImageIO.read(new File("images/" + this.toString() + ".jpg"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -84,7 +83,6 @@ public class Card {
 			System.out.println("Loading image at " + "images/" + this.toString() + ".jpg");
 			this.img = ImageIO.read(new File("images/" + this.toString() + ".jpg"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
