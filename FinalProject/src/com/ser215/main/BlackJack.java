@@ -237,6 +237,7 @@ public class BlackJack {
 						bank.clearBet();
 						gameState = GameState.PUSH;
 						lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+						lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 						
 						//Enable betting buttons, all other buttons disabled
 						if (bank.getBalance() >= 25) {
@@ -261,6 +262,7 @@ public class BlackJack {
 						bank.payoutBlackjack();
 						bank.clearBet();
 						lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+						lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 						gameState = GameState.BLACKJACK;
 						
 						//Enable betting buttons, all other buttons disabled
@@ -332,6 +334,7 @@ public class BlackJack {
 						playerHand1.clear();
 						dealerHand.clear();
 						bank.clearBet();
+						lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 						dealerHand.setShowHoleCard(true);
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
@@ -455,6 +458,7 @@ public class BlackJack {
 				} else if (playerHand1.getTotalValue() > 21){
 					// if player has busted, allow betting
 					bank.clearBet();
+					lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 					
 					if (bank.getBalance() >= 25) {
 						btnBet25.setEnabled(true);
@@ -486,6 +490,7 @@ public class BlackJack {
 										
 					if (selection == "Yes") {
 						bank.clearBet();
+						lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 						dealerHand.setShowHoleCard(true);
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
@@ -536,6 +541,7 @@ public class BlackJack {
 				}
 
 				bank.clearBet();
+				lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 				
 				// Bet buttons available, all others unavailable
 				if (bank.getBalance() >= 25) {
