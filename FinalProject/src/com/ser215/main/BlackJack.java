@@ -223,18 +223,19 @@ public class BlackJack {
 				
 				if (playerHand1.getTotalValue() == 21){
 					//If Player Has blackjack...
-					gameState = GameState.PLAYER_WIN;
 					
-					if (dealer.getShowingCard().getPipValue() == 0){
-						// TODO: Offer Insurance -- need a way for this to be resolved and then
-						// return back...
-					}
-					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
+					
+//					if (dealer.getShowingCard().getPipValue() == 0){
+//						// TODO: Offer Insurance -- need a way for this to be resolved and then
+//						// return back...
+//					}
+					if (dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, player is paid, payout even
 						
 						dealerHand.setShowHoleCard(true);
 						bank.payoutPush();
 						bank.clearBet();
+						gameState = GameState.PUSH;
 						lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 						
 						//Enable betting buttons, all other buttons disabled
@@ -260,6 +261,7 @@ public class BlackJack {
 						bank.payoutBlackjack();
 						bank.clearBet();
 						lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
+						gameState = GameState.BLACKJACK;
 						
 						//Enable betting buttons, all other buttons disabled
 						if (bank.getBalance() >= 25) {
@@ -281,15 +283,15 @@ public class BlackJack {
 				
 				else{
 					//If Player doesn't have blackjack...
-					if (dealer.getShowingCard().getPipValue() == 0){
-						// TODO: Offer Insurance -- need a way for this to be resolved and then
-						// return back...
-					}
-					if (dealer.getShowingCard().getValue() == 10 && dealerHand.getTotalValue() == 21){
+//					if (dealer.getShowingCard().getPipValue() == 0){
+//						// TODO: Offer Insurance -- need a way for this to be resolved and then
+//						// return back...
+//					}
+					if (dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, end turn.
 						
 						dealerHand.setShowHoleCard(true);
-						
+						gameState = GameState.DEALER_WIN;
 						//Enable betting buttons, all other buttons disabled
 						if (bank.getBalance() >= 25) {
 							btnBet25.setEnabled(true);
@@ -320,7 +322,7 @@ public class BlackJack {
 				}
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN || gameState == GameState.PUSH) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					System.out.println("deal");
@@ -516,7 +518,7 @@ public class BlackJack {
 				}
 				
 				if(dealerHand.getTotalValue() > playerHand1.getTotalValue() && dealerHand.getTotalValue() < 21) {
-					bank.payoutPush();
+					//bank.payoutPush();
 					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 					gameState = GameState.DEALER_WIN;
 				}
@@ -524,7 +526,7 @@ public class BlackJack {
 				if(dealerHand.getTotalValue() == playerHand1.getTotalValue()){
 					bank.payoutPush();
 					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
-					gameState = GameState.DEALER_WIN;
+					gameState = GameState.PUSH;
 				}
 				
 				if(dealerHand.getTotalValue() < playerHand1.getTotalValue() || dealerHand.getTotalValue() > 21){
@@ -588,6 +590,10 @@ public class BlackJack {
 			case DEALER_WIN: msg = "Dealer wins. Keep playing?";
 				break;
 			case BANK_EMPTY: msg = "You're out of money. Want to start again?";
+				break;
+			case PUSH: msg = "The hand is a push! Keep playing?";
+				break;
+			case BLACKJACK: msg = "You got blackjack! Keep playing?";
 				break;
 			default: msg = "";
 		}
