@@ -1,29 +1,32 @@
 package com.ser215.main;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 
 public class Card {
 	private int suit;
 	private int value;
 	private int pipValue;
-	private BufferedImage img;
+	private Image img;
+	private URL imgUrl;
 	
 	private static String[] suits = {"heart", "diamond", "club", "spade"};
 	private static String[] pipValues = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-		
+	
+	public Card() {};
+	
 	public Card(int suit, int pipValue) {
 		this.suit = suit;
 		this.pipValue = pipValue;
 		setInitialValue(pipValue);
-		try {
-			this.img = ImageIO.read(new File("images/" + this.toString() + ".jpg"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		Card c = new Card();
+		@SuppressWarnings("rawtypes")
+		Class cls = c.getClass();
+		imgUrl = cls.getResource("/images/" + this.toString() + ".jpg");
+				
+		this.img = Toolkit.getDefaultToolkit().getImage(imgUrl);
 		
 	}
 	
@@ -74,17 +77,12 @@ public class Card {
 		return pipValue == 0;
 	}
 	
-	public BufferedImage getImg() {
+	public Image getImg() {
 		return img;
 	}
 
-	public void setImg(BufferedImage img) {
-		try {
-			System.out.println("Loading image at " + "images/" + this.toString() + ".jpg");
-			this.img = ImageIO.read(new File("images/" + this.toString() + ".jpg"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void setImg(Image img) {
+		this.img = img;
 	}
 
 }

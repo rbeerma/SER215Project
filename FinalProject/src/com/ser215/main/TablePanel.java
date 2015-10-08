@@ -2,11 +2,10 @@ package com.ser215.main;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -16,17 +15,16 @@ class TablePanel extends JPanel {
 	final int[] PLAYER_X = {50, 100, 150, 200, 250, 300, 350, 400, 450};
 	final int DEALER_Y = 44;
 	final int PLAYER_Y = 232;
-	
-	BufferedImage cardBack;
+	private URL backUrl;
+	private Image cardBack;
 	
 	public TablePanel() {
 		setBackground(new Color(0, 153, 51));
-		try {
-			this.cardBack = ImageIO.read(new File("images/back.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		@SuppressWarnings("rawtypes")
+		Class cls = this.getClass();
+		backUrl = cls.getResource("/images/back.jpg");
+		this.cardBack = Toolkit.getDefaultToolkit().getImage(backUrl);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -39,7 +37,7 @@ class TablePanel extends JPanel {
 			
 			for (Card card : Dealer.getDealerHand().getCards()) {
 				if (dealerX < Hand.CARD_LIMIT) {
-					BufferedImage cardImg = card.getImg();
+					Image cardImg = card.getImg();
 					g.drawImage(cardImg, DEALER_X[dealerX], DEALER_Y, null);
 					dealerX += 1;
 				}
@@ -51,7 +49,7 @@ class TablePanel extends JPanel {
 			
 			for (Card card : Player.getPlayerHand1().getCards()) {
 				if (playerX < Hand.CARD_LIMIT) {
-					BufferedImage cardImg = card.getImg();
+					Image cardImg = card.getImg();
 					g.drawImage(cardImg, PLAYER_X[playerX], PLAYER_Y, null);
 					playerX += 1;
 				}

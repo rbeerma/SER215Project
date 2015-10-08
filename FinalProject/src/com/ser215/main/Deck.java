@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Deck {
 	private ArrayList<Card> cards;
-	private Card nextCard; //not sure if this is needed
+	//private Card nextCard; //not sure if this is needed
 	private static int totalCards;
 	public static boolean cardsDealt;
 		
