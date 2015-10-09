@@ -23,22 +23,27 @@ public class Dealer {
 		return dealerHand;
 	}
 	
+	// Get the showing card
 	public Card getShowingCard() {
 		return showingCard;
 	}
 	
+	// Set the showing card
 	public void setShowingCard(Card showingCard) {
 		this.showingCard = showingCard;
 	}
 	
+	// Get the hole card
 	public Card getHoleCard() {
 		return holeCard;
 	}
 	
+	// Set the hole card
 	public void setHoleCard(Card holeCard) {
 		this.holeCard = holeCard;
 	}
 	
+	// Clears the dealer hand
 	public void clearHand(){
 		dealerHand.clear();
 	}

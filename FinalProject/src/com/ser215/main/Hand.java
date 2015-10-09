@@ -13,15 +13,18 @@ public class Hand {
 		this.showHoleCard = false;
 	}
 	
+	// Add new card to the hand
 	public void addCard(Card card) {
 		cards.add(card);
 		this.totalValue += card.getValue();
 	}
 	
+	// Get the total value of the hand
 	public int getTotalValue() {
 		return totalValue;
 	}
 
+	// Set the total value of the hand
 	public void setTotalValue(int totalValue) {
 		this.totalValue = totalValue;
 	}
@@ -41,14 +44,17 @@ public class Hand {
 		}
 	}
 
+	// Gets all cards in the hand
 	public ArrayList<Card> getCards() {
 		return cards;
 	}
 	
+	// Sets which card is the hole card
 	public boolean isShowHoleCard() {
 		return showHoleCard;
 	}
 	
+	// Exposes the hole card to show results
 	public void setShowHoleCard(boolean showHoleCard) {
 		this.showHoleCard = showHoleCard;
 	}
@@ -63,6 +69,7 @@ public class Hand {
 		return temp;
 	}
 	
+	// Removes all cards from the hand after a round of play
 	public void clear() {
 		this.cards.clear();
 		this.totalValue = 0;

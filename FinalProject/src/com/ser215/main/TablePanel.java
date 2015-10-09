@@ -31,7 +31,7 @@ class TablePanel extends JPanel {
 		super.paintComponent(g);
 		GameState state = BlackJack.gameState;
 		
-		//if (state == GameState.PLAYER_ACT || state == GameState.DEALER_ACT) {
+		// Draw cards on the table with each game update
 		if (state != GameState.INIT && state != GameState.BETTING) {
 			int dealerX = 0;
 			int playerX = 0;
@@ -56,10 +56,7 @@ class TablePanel extends JPanel {
 				}
 			}
 		}
-		
-		/*if (state == GameState.PLAYER_BUST) {
-			
-		}*/
+
 		repaint();
 	}
 }

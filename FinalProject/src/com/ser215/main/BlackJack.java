@@ -125,8 +125,8 @@ public class BlackJack {
 		lblPlayerHand.setBounds(12, 42, 81, 16);
 		bottomPanel.add(lblPlayerHand);
 		
-		JLabel lblDealerHand = new JLabel("Dealer Hand:");
-		lblDealerHand.setBounds(12, 13, 81, 16);
+		JLabel lblDealerHand = new JLabel("Dealer Showing:");
+		lblDealerHand.setBounds(12, 13, 100, 16);
 		bottomPanel.add(lblDealerHand);
 		
 		JLabel lblPlayerValue = new JLabel("");
@@ -219,16 +219,10 @@ public class BlackJack {
 				lblPlayerValue.setText(String.valueOf(playerHand1.getTotalValue()));
 				
 				// ***** comment out the next line after testing *****
-				lblDealerValue.setText(String.valueOf(dealerHand.getTotalValue()));
+				lblDealerValue.setText(String.valueOf(dealer.getShowingCard().getValue()));
 				
-				if (playerHand1.getTotalValue() == 21){
-					//If Player Has blackjack...
+				if (playerHand1.getTotalValue() == 21) {
 					
-					
-//					if (dealer.getShowingCard().getPipValue() == 0){
-//						// TODO: Offer Insurance -- need a way for this to be resolved and then
-//						// return back...
-//					}
 					if (dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, player is paid, payout even
 						
@@ -254,8 +248,7 @@ public class BlackJack {
 						btnDeal.setEnabled(false);
 						btnHit.setEnabled(false);
 						btnStand.setEnabled(false);
-					}
-					else{
+					} else {
 						dealerHand.setShowHoleCard(true);
 						
 						// Player has blackjack, dealer doesn't, payout for blackjack
@@ -281,14 +274,8 @@ public class BlackJack {
 						btnHit.setEnabled(false);
 						btnStand.setEnabled(false);
 					}
-				}
-				
-				else{
-					//If Player doesn't have blackjack...
-//					if (dealer.getShowingCard().getPipValue() == 0){
-//						// TODO: Offer Insurance -- need a way for this to be resolved and then
-//						// return back...
-//					}
+				} else {
+
 					if (dealerHand.getTotalValue() == 21){
 						//If dealer is showing 10 and has blackjack, end turn.
 						
@@ -305,17 +292,10 @@ public class BlackJack {
 							btnBet100.setEnabled(true);
 						}
 						btnClearBet.setEnabled(true);
-
 						btnDeal.setEnabled(false);
 						btnHit.setEnabled(false);
 						btnStand.setEnabled(false);
-					}
-					else{
-						if(playerHand1.getCards().get(0).getValue() == playerHand1.getCards().get(1).getValue()){
-							// Allow split if first two cards have equal value
-
-						}
-						
+					} else {
 						// Allow hit, stand, double
 						
 						btnHit.setEnabled(true);
@@ -324,10 +304,10 @@ public class BlackJack {
 				}
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN || gameState == GameState.PUSH) {
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN
+						|| gameState == GameState.PUSH || gameState == GameState.BLACKJACK) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
-					System.out.println("deal");
 					String selection = (String)optionPane.getValue();
 										
 					if (selection == "Yes") {
@@ -453,8 +433,9 @@ public class BlackJack {
 					// If player has 21, make all other play buttons except 
 					// Stand unavailable.
 					btnHit.setEnabled(false);
-					gameState = GameState.PLAYER_WIN;
-
+					btnStand.setEnabled(true);
+					//gameState = GameState.PLAYER_WIN;
+					
 				} else if (playerHand1.getTotalValue() > 21){
 					// if player has busted, allow betting
 					bank.clearBet();
@@ -483,13 +464,15 @@ public class BlackJack {
 				}
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN || gameState == GameState.PUSH) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();
 										
 					if (selection == "Yes") {
 						bank.clearBet();
+						playerHand1.clear();
+						dealerHand.clear();
 						lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
 						dealerHand.setShowHoleCard(true);
 					} else if (selection == null || selection == "No") {
@@ -560,13 +543,17 @@ public class BlackJack {
 				btnStand.setEnabled(false);
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN) {
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN || gameState == GameState.PUSH) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();
 										
 					if (selection == "Yes") {
-						
+						bank.clearBet();
+						playerHand1.clear();
+						dealerHand.clear();
+						lblBetAmt.setText(String.valueOf(df.format(bank.getCurrentBet())));
+						dealerHand.setShowHoleCard(true);
 					} else if (selection == null || selection == "No") {
 						frame.dispose();
 					}

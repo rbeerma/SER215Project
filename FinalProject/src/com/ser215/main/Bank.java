@@ -18,18 +18,22 @@ public class Bank {
 		this.currentBet = bet;
 	}
 	
+	// Currently unused
 	public double getSplitBet() {
 		return splitBet;
 	}
 
+	// Currently unused
 	public void setSplitBet(double splitBet) {
 		this.splitBet = splitBet;
 	}
 
+	// Gets the current bet amount
 	public double getCurrentBet() {
 		return currentBet;
 	}
 
+	// Sets the current bet amount
 	public void setCurrentBet(double currentBet) {
 		this.currentBet = currentBet;
 	}
@@ -42,6 +46,7 @@ public class Bank {
 		return this.balance;
 	}
 	
+	// Sets the total bank balance
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
@@ -78,11 +83,13 @@ public class Bank {
 		this.currentBet = 0;
 	}
 	
+	// This method is currently unused
 	public void payoutSurrender() {
 		balance += 0.5 * currentBet;
 		currentBet = 0;
 	}
 
+	// Pays out the correct amount if the round is a push
 	public void payoutPush() {
 		balance += currentBet;
 		currentBet = 0;
