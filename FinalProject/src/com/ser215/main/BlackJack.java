@@ -496,7 +496,7 @@ public class BlackJack {
 				
 				while(dealerDrawing){
 					//Dealer draws until hand value >= 17
-					if(dealerHand.getTotalValue() >= 17){
+					if(dealerHand.getTotalValue() >= 17 || (dealerHand.hasAce() && dealerHand.getTotalValue() >=18)){
 						dealerDrawing = false;
 					}
 					else{
@@ -543,7 +543,7 @@ public class BlackJack {
 				btnStand.setEnabled(false);
 				
 				// use this block to update and show dialog after each hand. Change message based on hand result.
-				if (gameState == GameState.PLAYER_BUST || gameState == GameState.PLAYER_WIN || gameState == GameState.DEALER_WIN || gameState == GameState.PUSH) {
+				if (gameState == GameState.PLAYER_BUST || gameState == GameState.DEALER_WIN || gameState == GameState.PLAYER_WIN || gameState == GameState.PUSH || gameState == GameState.BLACKJACK) {
 					optionPane.setMessage(getMessage(gameState));
 					dialog.setVisible(true);
 					String selection = (String)optionPane.getValue();

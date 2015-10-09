@@ -74,4 +74,14 @@ public class Hand {
 		this.cards.clear();
 		this.totalValue = 0;
 	}
+	
+	public boolean hasAce(){
+		boolean ace = false;
+		for(Card card : cards){
+			if(card.isAce()){
+				ace = true;
+			}
+		}
+		return ace;
+	}
 }
