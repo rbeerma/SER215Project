@@ -505,7 +505,7 @@ public class BlackJack {
 					}
 				}
 				
-				if(dealerHand.getTotalValue() > playerHand1.getTotalValue() && dealerHand.getTotalValue() < 21) {
+				if(dealerHand.getTotalValue() > playerHand1.getTotalValue() && dealerHand.getTotalValue() <= 21) {
 					//bank.payoutPush();
 					lblBalance.setText(String.valueOf(df.format(bank.getBalance())));
 					gameState = GameState.DEALER_WIN;
